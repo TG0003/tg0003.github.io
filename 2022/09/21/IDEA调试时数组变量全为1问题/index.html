@@ -20,25 +20,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="article">
-<meta property="og:title" content="test">
-<meta property="og:url" content="http://example.com/2022/09/21/test/index.html">
+    <meta name="description" content="1、问题描述用IDEA debug的时候发现数组变量全是1，不符合预期结果，而且只是debug出现，直接运行则没问题，Eclipse则没有这个问题，如下所示：  2、原因分析经过测试发现，将a改成其他名称比如y就没有问题，所以a应该是IDEA的保留字，可能其他变量名也存在这个类似问题。 3、解决方法把a改成其他名称，其他类似情况出现也可以试试改变量名。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDEA调试时数组变量全为1问题">
+<meta property="og:url" content="http://example.com/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="简简单单">
+<meta property="og:description" content="1、问题描述用IDEA debug的时候发现数组变量全是1，不符合预期结果，而且只是debug出现，直接运行则没问题，Eclipse则没有这个问题，如下所示：  2、原因分析经过测试发现，将a改成其他名称比如y就没有问题，所以a应该是IDEA的保留字，可能其他变量名也存在这个类似问题。 3、解决方法把a改成其他名称，其他类似情况出现也可以试试改变量名。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-09-21T07:31:26.949Z">
-<meta property="article:modified_time" content="2022-09-21T07:37:56.523Z">
+<meta property="og:image" content="http://example.com/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/img_problem.png">
+<meta property="article:published_time" content="2022-09-21T07:41:08.000Z">
+<meta property="article:modified_time" content="2022-09-21T07:53:54.393Z">
 <meta property="article:author" content="Time">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/img_problem.png">
 
 
-<link rel="canonical" href="http://example.com/2022/09/21/test/">
+<link rel="canonical" href="http://example.com/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/09/21/test/","path":"2022/09/21/test/","title":"test"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/","path":"2022/09/21/IDEA调试时数组变量全为1问题/","title":"IDEA调试时数组变量全为1问题"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>test | 简简单单</title>
+<title>IDEA调试时数组变量全为1问题 | 简简单单</title>
   
 
 
@@ -101,7 +105,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -114,6 +118,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">1、问题描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">2、原因分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">3、解决方法</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -173,7 +178,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/21/test/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/myAvatar.png">
@@ -186,12 +191,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="test | 简简单单">
+      <meta itemprop="name" content="IDEA调试时数组变量全为1问题 | 简简单单">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          test
+          IDEA调试时数组变量全为1问题
         </h1>
 
         <div class="post-meta-container">
@@ -203,7 +208,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2022-09-21 15:31:26 / Modified: 15:37:56" itemprop="dateCreated datePublished" datetime="2022-09-21T15:31:26+08:00">2022-09-21</time>
+      <time title="Created: 2022-09-21 15:41:08 / Modified: 15:53:54" itemprop="dateCreated datePublished" datetime="2022-09-21T15:41:08+08:00">2022-09-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -225,7 +230,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        
+        <h4 id="1、问题描述"><a href="#1、问题描述" class="headerlink" title="1、问题描述"></a>1、问题描述</h4><p>用IDEA debug的时候发现数组变量全是1，不符合预期结果，而且只是debug出现，直接运行则没问题，Eclipse则没有这个问题，如下所示：</p>
+<p><img src="/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/img_problem.png"></p>
+<h4 id="2、原因分析"><a href="#2、原因分析" class="headerlink" title="2、原因分析"></a>2、原因分析</h4><p>经过测试发现，将a改成其他名称比如y就没有问题，所以a应该是IDEA的保留字，可能其他变量名也存在这个类似问题。</p>
+<h4 id="3、解决方法"><a href="#3、解决方法" class="headerlink" title="3、解决方法"></a>3、解决方法</h4><p>把a改成其他名称，其他类似情况出现也可以试试改变量名。</p>
+
     </div>
 
     
