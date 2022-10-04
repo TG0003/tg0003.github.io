@@ -20,23 +20,44 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="简简单单">
-<meta property="og:url" content="http://example.com/index.html">
+    <meta name="description" content="前言何为Seata？一个阿里巴巴的一个开源的分布式事务解决方案项目，致力于解决分布式环境下的事务问题，官网为https:&#x2F;&#x2F;seata.io&#x2F;，其基本原理如下图所示：  大致原理为所有的微服务都需要向TC（Transaction Coordinator）服务端注册，TC服务端会全局控制微服务事务调用关系的整个过程，包括事务进行间的数据管理；TM（Transaction Manager）端则负责全局">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次基于Spring Cloud的分布式事务解决方案Seata的整合过程">
+<meta property="og:url" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/index.html">
 <meta property="og:site_name" content="简简单单">
+<meta property="og:description" content="前言何为Seata？一个阿里巴巴的一个开源的分布式事务解决方案项目，致力于解决分布式环境下的事务问题，官网为https:&#x2F;&#x2F;seata.io&#x2F;，其基本原理如下图所示：  大致原理为所有的微服务都需要向TC（Transaction Coordinator）服务端注册，TC服务端会全局控制微服务事务调用关系的整个过程，包括事务进行间的数据管理；TM（Transaction Manager）端则负责全局">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/img01.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_config_guide.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_run_guide.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_run_success03.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_run_success01.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_run_success02.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_client_run_success01.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_client_run_success02.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_client_run_success03.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_test_res01.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_test_res02.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_test_res03.png">
+<meta property="og:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/seata_test_res04.png">
+<meta property="article:published_time" content="2022-10-03T06:35:06.000Z">
+<meta property="article:modified_time" content="2022-10-04T05:43:45.892Z">
 <meta property="article:author" content="Time">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="SpringCloud">
+<meta property="article:tag" content="Seata">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/img01.png">
 
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"en","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/","path":"2022/10/03/记一次基于Spring-Cloud的分布式事务解决方案Seata的整合过程/","title":"记一次基于Spring Cloud的分布式事务解决方案Seata的整合过程"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>简简单单</title>
+<title>记一次基于Spring Cloud的分布式事务解决方案Seata的整合过程 | 简简单单</title>
   
 
 
@@ -66,7 +87,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">简简单单</h1>
+      <p class="site-title">简简单单</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">HELLO,TRUTH</p>
@@ -99,7 +120,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -112,6 +133,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">2.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">搭建过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Seata"><span class="nav-number">3.1.</span> <span class="nav-text">安装Seata</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AESeata%E4%B8%AD%E5%BF%83%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%87%86%E5%A4%87"><span class="nav-number">3.2.</span> <span class="nav-text">设置Seata中心的配置信息及数据库准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AEMySql-Seata%E7%9B%B8%E5%85%B3%E8%A1%A8%E4%BF%A1%E6%81%AF"><span class="nav-number">3.2.1.</span> <span class="nav-text">设置MySql Seata相关表信息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AESeata-TC%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%8F%8A%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">3.3.</span> <span class="nav-text">配置Seata TC服务端及客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AETC%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E5%92%8C%E8%8E%B7%E5%8F%96%E4%B8%AD%E5%BF%83%E9%85%8D%E7%BD%AE"><span class="nav-number">3.3.1.</span> <span class="nav-text">配置TC服务发现和获取中心配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E7%8E%B0seata%E6%9C%8D%E5%8A%A1%E5%8F%8A%E8%8E%B7%E5%8F%96%E4%B8%AD%E5%BF%83%E6%9C%8D%E5%8A%A1"><span class="nav-number">3.3.2.</span> <span class="nav-text">配置客户端发现seata服务及获取中心服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%95%B0%E6%8D%AE%E6%BA%90%E4%BB%A3%E7%90%86"><span class="nav-number">3.3.3.</span> <span class="nav-text">配置客户端数据源代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">3.3.4.</span> <span class="nav-text">运行客户端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F%E8%AF%AD"><span class="nav-number">5.</span> <span class="nav-text">结束语</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -165,16 +187,17 @@
 </noscript>
 
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -188,13 +211,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 简简单单">
+      <meta itemprop="name" content="记一次基于Spring Cloud的分布式事务解决方案Seata的整合过程 | 简简单单">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">记一次基于Spring Cloud的分布式事务解决方案Seata的整合过程</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          记一次基于Spring Cloud的分布式事务解决方案Seata的整合过程
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -224,6 +247,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
 </div>
 
         </div>
@@ -233,7 +263,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>何为Seata？一个阿里巴巴的一个开源的分布式事务解决方案项目，致力于解决分布式环境下的事务问题，官网为<a target="_blank" rel="noopener" href="https://seata.io/%EF%BC%8C%E5%85%B6%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%A6%82%E4%B8%8B%E5%9B%BE%E6%89%80%E7%A4%BA%EF%BC%9A">https://seata.io/，其基本原理如下图所示：</a></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>何为Seata？一个阿里巴巴的一个开源的分布式事务解决方案项目，致力于解决分布式环境下的事务问题，官网为<a target="_blank" rel="noopener" href="https://seata.io/%EF%BC%8C%E5%85%B6%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%A6%82%E4%B8%8B%E5%9B%BE%E6%89%80%E7%A4%BA%EF%BC%9A">https://seata.io/，其基本原理如下图所示：</a></p>
 <p><img src="/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/img01.png"></p>
 <p>大致原理为所有的微服务都需要向TC（Transaction Coordinator）服务端注册，TC服务端会全局控制微服务事务调用关系的整个过程，包括事务进行间的数据管理；TM（Transaction Manager）端则负责全局事务的创建及管理；RM（Resource Manager）为各分支事务；每次调用事务发生，触发TM，就会产生一个全局事务id，为xid，这个全局事务id会在整个全局事务下的个分支事务间传递，以达到通知和控制管理效果，事务进行期间各分支事务都会把相应的sql log传到TC端，TC端负责管理起来，若期间任一事务发生异常，TC收到消息，便通知各分支事务进行从之前产生的sql log进行rollback补偿，以达到全局事务一致性目的；总的来说就是把分布式事务进行归一化，集中控制、管理、反馈。Seata主要把上述环境的如TC、TM环境搭建起来（要进行服务发现和中心化配置及数据存储管理等），然后在事务方法上加上@GlobalTransactional注解即可。本文将Seata与Nacos配合完成环境搭建和测试，Seata的Github发布地址为<a target="_blank" rel="noopener" href="https://github.com/seata/seata/releases%E3%80%82">https://github.com/seata/seata/releases。</a></p>
 <h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>Seata Server linux 1.5.2</p>
@@ -303,7 +333,6 @@
 <p>这个记录最多保持60s。</p>
 <h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>到这里，Seata的搭建和测试就已经完成，期间还是有不少坑的，比如开始不知道数据源代理的处理，就折腾了许久。大家需要学习的可以参考我的项目地址：<a target="_blank" rel="noopener" href="https://github.com/TG0003/SpringCloudAlibabaTest/tree/main%E3%80%82">https://github.com/TG0003/SpringCloudAlibabaTest/tree/main。</a></p>
 
-      
     </div>
 
     
@@ -311,99 +340,27 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/SpringCloud/" rel="tag"># SpringCloud</a>
+              <a href="/tags/Seata/" rel="tag"># Seata</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/" rel="prev" title="IDEA调试时数组变量全为1问题">
+                  <i class="fa fa-chevron-left"></i> IDEA调试时数组变量全为1问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/myAvatar.png">
-      <meta itemprop="name" content="Time">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="简简单单">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 简简单单">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">IDEA调试时数组变量全为1问题</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-09-21 15:41:08" itemprop="dateCreated datePublished" datetime="2022-09-21T15:41:08+08:00">2022-09-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-09-25 20:52:00" itemprop="dateModified" datetime="2022-09-25T20:52:00+08:00">2022-09-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>用IDEA debug的时候发现数组变量全是1，不符合预期结果，而且只是debug出现，直接运行则没问题，Eclipse则没有这个问题，如下所示：</p>
-<p><img src="/2022/09/21/IDEA%E8%B0%83%E8%AF%95%E6%97%B6%E6%95%B0%E7%BB%84%E5%8F%98%E9%87%8F%E5%85%A8%E4%B8%BA1%E9%97%AE%E9%A2%98/img_problem.png"></p>
-<h2 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h2><p>经过测试发现，将a改成其他名称比如y就没有问题，所以a应该是IDEA的保留字（反正数组是这样），可能其他变量名也存在这个类似问题。</p>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>把a改成其他名称，其他类似情况出现也可以试试改变量名。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
 
 
 
