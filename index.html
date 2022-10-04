@@ -211,7 +211,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-10-04 13:47:30" itemprop="dateModified" datetime="2022-10-04T13:47:30+08:00">2022-10-04</time>
+      <time title="Modified: 2022-10-04 13:54:06" itemprop="dateModified" datetime="2022-10-04T13:54:06+08:00">2022-10-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -235,7 +235,7 @@
     <div class="post-body" itemprop="articleBody">
           <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>何为Seata？一个阿里巴巴的一个开源的分布式事务解决方案项目，致力于解决分布式环境下的事务问题，官网为<a target="_blank" rel="noopener" href="https://seata.io/%EF%BC%8C%E5%85%B6%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%A6%82%E4%B8%8B%E5%9B%BE%E6%89%80%E7%A4%BA%EF%BC%9A">https://seata.io/，其基本原理如下图所示：</a></p>
 <p><img src="/2022/10/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9F%BA%E4%BA%8ESpring-Cloud%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88Seata%E7%9A%84%E6%95%B4%E5%90%88%E8%BF%87%E7%A8%8B/img01.png"></p>
-<p>大致原理为所有的微服务都需要向TC（Transaction Coordinator）服务端注册，TC服务端会全局控制微服务事务调用关系的整个过程，包括事务进行间的数据管理；TM（Transaction Manager）端则负责全局事务的创建及管理；RM（Resource Manager）为各分支事务；每次调用事务发生，触发TM，就会产生一个全局事务id，为xid，这个全局事务id会在整个全局事务下的个分支事务间传递，以达到通知和控制管理效果，事务进行期间各分支事务都会把相应的sql log传到TC端，TC端负责管理起来，若期间任一事务发生异常，TC收到消息，便通知各分支事务进行从之前产生的sql log进行rollback补偿，以达到全局事务一致性目的；总的来说就是把分布式事务进行归一化，集中控制、管理、反馈。Seata主要把上述环境的如TC、TM环境搭建起来（要进行服务发现和中心化配置及数据存储管理等），然后在事务方法上加上@GlobalTransactional注解即可。本文将Seata与Nacos配合完成环境搭建和测试，Seata的Github发布地址为<a target="_blank" rel="noopener" href="https://github.com/seata/seata/releases%E3%80%82">https://github.com/seata/seata/releases。</a></p>
+<p>大致原理为所有的微服务都需要向TC（Transaction Coordinator）服务端注册，TC服务端会全局控制微服务事务调用关系的整个过程，包括事务进行间的数据管理；TM（Transaction Manager）端则负责全局事务的创建及管理；RM（Resource Manager）为各分支事务；每次调用事务发生，触发TM，就会产生一个全局事务id，为xid，这个全局事务id会在整个全局事务下的个分支事务间传递，以达到通知和控制管理效果，事务进行期间各分支事务都会把相应的sql log传到TC端，TC端负责管理起来，若期间任一事务发生异常，TC收到消息，便通知各分支事务进行从之前产生的sql log进行rollback补偿，以达到全局事务一致性目的；总的来说就是把分布式事务进行归一化，集中控制、管理、反馈。Seata主要把上述环境的如TC、TM环境搭建起来（要进行服务发现和中心化配置及数据存储管理等），然后在事务方法上加上@GlobalTransactional注解即可。本文将Seata与Nacos配合完成环境搭建和测试，Seata的Github发布地址为<a target="_blank" rel="noopener" href="https://github.com/seata/seata/releases">https://github.com/seata/seata/releases</a></p>
 <h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>Seata Server linux 1.5.2</p>
 <p>MySql Server 5.7.39</p>
 <p>CentOS 7.6.1810</p>
